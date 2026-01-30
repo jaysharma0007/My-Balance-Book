@@ -4,11 +4,13 @@ const app = {
         app.showLoader();
         app.loadTheme();
         app.setupPageTransitions(); // Intercept links
+        app.initMobileMenu(); // Add mobile menu init
 
-        // Navbar Scroll Effect
+        // Navbar Scroll Effect (Only for Landing Page)
         window.addEventListener('scroll', () => {
             const header = document.querySelector('header');
-            if (header) { // Check if header exists (might not on all pages)
+            // Check if it's the landing page header (doesn't have dashboard classes)
+            if (header && !header.classList.contains('dashboard-header')) {
                 if (window.scrollY > 50) {
                     header.classList.add('scrolled');
                 } else {
@@ -276,45 +278,48 @@ const app = {
         }
     },
 
-    // UI Init
+    // UI Init (Disabled collapsible sidebar as per user request to 'stop the moving')
     initUI: () => {
-        const menuBtn = document.getElementById('menu-toggle-input'); // New checkbox input
         const sidebar = document.querySelector('.sidebar');
-        const overlay = document.querySelector('.sidebar-overlay') || document.createElement('div');
-
-        if (!document.querySelector('.sidebar-overlay')) {
-            overlay.className = 'sidebar-overlay';
-            document.body.appendChild(overlay);
+        if (sidebar) {
+            // Ensure sidebar is in its default expanded state
+            sidebar.classList.remove('collapsed');
+            sidebar.classList.remove('open');
+            localStorage.setItem('sidebar-collapsed', 'false');
         }
 
-        // Load Sidebar State
-        const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
-        if (isCollapsed && window.innerWidth > 1024) {
-            sidebar.classList.add('collapsed');
-            if (menuBtn) menuBtn.checked = true;
+        // Link User Profile to Settings
+        const userProfile = document.querySelector('.user-profile');
+        if (userProfile) {
+            userProfile.addEventListener('click', () => {
+                app.showLoader();
+                setTimeout(() => {
+                    window.location.href = 'settings.html';
+                }, 500);
+            });
         }
+    },
 
-        if (menuBtn && sidebar) {
-            menuBtn.addEventListener('change', () => {
-                if (window.innerWidth > 1024) {
-                    // Desktop: Toggle Collapsed
-                    const collapsed = sidebar.classList.toggle('collapsed');
-                    localStorage.setItem('sidebar-collapsed', collapsed);
-                } else {
-                    // Mobile: Toggle Slide-in
-                    sidebar.classList.toggle('open');
-                    overlay.classList.toggle('active');
-                }
+    // Mobile Menu Toggle (Index Page)
+    initMobileMenu: () => {
+        const navToggle = document.getElementById('nav-toggle-input');
+        const navLinks = document.querySelector('.nav-links');
+        if (navToggle && navLinks) {
+            navToggle.addEventListener('change', () => {
+                navLinks.classList.toggle('active', navToggle.checked);
             });
 
-            overlay.addEventListener('click', () => {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('active');
-                if (menuBtn) menuBtn.checked = false;
+            // Close menu on link click
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navToggle.checked = false;
+                    navLinks.classList.remove('active');
+                });
             });
         }
     }
 };
+
 
 document.addEventListener('DOMContentLoaded', () => {
     app.init();
