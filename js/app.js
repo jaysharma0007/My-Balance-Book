@@ -305,9 +305,14 @@ const app = {
     initMobileMenu: () => {
         const navToggle = document.getElementById('nav-toggle-input');
         const navLinks = document.querySelector('.nav-links');
+        const contentWrapper = document.getElementById('content-wrapper');
+
         if (navToggle && navLinks) {
             navToggle.addEventListener('change', () => {
                 navLinks.classList.toggle('active', navToggle.checked);
+                if (contentWrapper) {
+                    contentWrapper.classList.toggle('pushed-back', navToggle.checked);
+                }
             });
 
             // Close menu on link click
@@ -315,6 +320,7 @@ const app = {
                 link.addEventListener('click', () => {
                     navToggle.checked = false;
                     navLinks.classList.remove('active');
+                    if (contentWrapper) contentWrapper.classList.remove('pushed-back');
                 });
             });
         }
