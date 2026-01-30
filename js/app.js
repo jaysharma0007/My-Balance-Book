@@ -324,9 +324,11 @@ const app = {
     toggleSidebar: () => {
         const sidebar = document.querySelector('.sidebar');
         const overlay = document.querySelector('.sidebar-overlay');
+        const mainContent = document.querySelector('.main-content');
         if (sidebar && overlay) {
             sidebar.classList.toggle('open');
             overlay.classList.toggle('active');
+            if (mainContent) mainContent.classList.toggle('pushed-back');
         }
     },
 

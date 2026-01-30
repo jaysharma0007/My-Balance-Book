@@ -759,28 +759,45 @@ body {
     background: var(--bg-surface);
 }
 
-/* Responsive Logic */
+/* Responsive Logic & Crazy 3D Transitions */
+body {
+    perspective: 1500px;
+    overflow-x: hidden;
+}
+
 @media (max-width: 1024px) {
     .sidebar {
-        transform: translateX(-100%);
+        transform: translateX(-110%) rotateY(-30deg);
+        /* 3D Perspective start */
+        transform-origin: left center;
         width: var(--sidebar-width) !important;
         position: fixed;
         top: 0;
         left: 0;
         height: 100vh;
         z-index: 1001;
-        /* Above overlay */
-        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        will-change: transform;
+        transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.4s ease;
+        will-change: transform, opacity;
+        opacity: 0;
     }
 
     .sidebar.open {
-        transform: translateX(0);
-        box-shadow: 20px 0 60px rgba(0, 0, 0, 0.2);
+        transform: translateX(0) rotateY(0deg);
+        opacity: 1;
+        box-shadow: 30px 0 80px rgba(0, 0, 0, 0.3);
     }
 
     .main-content {
         margin-left: 0 !important;
+        transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), filter 0.6s ease;
+        will-change: transform, filter;
+    }
+
+    /* Scale-back effect when sidebar is open */
+    .main-content.pushed-back {
+        transform: scale(0.92) translateX(20px) rotateY(5deg);
+        filter: brightness(0.7) blur(2px);
+        pointer-events: none;
     }
 
     .sidebar-overlay {
@@ -789,18 +806,31 @@ body {
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
+        background: rgba(var(--primary-rgb), 0.1);
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
         z-index: 1000;
         opacity: 0;
         visibility: hidden;
-        transition: all 0.4s ease;
+        transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
 
     .sidebar-overlay.active {
         opacity: 1;
         visibility: visible;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        animation: overlay-pulse 4s infinite alternate;
+    }
+}
+
+@keyframes overlay-pulse {
+    from {
+        background: rgba(var(--primary-rgb), 0.05);
+    }
+
+    to {
+        background: rgba(var(--primary-rgb), 0.15);
     }
 }
 
