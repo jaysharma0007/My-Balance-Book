@@ -5,6 +5,7 @@ const app = {
         app.loadTheme();
         app.setupPageTransitions(); // Intercept links
         app.initMobileMenu(); // Add mobile menu init
+        app.initSidebar(); // Add sidebar initialization
 
         // Navbar Scroll Effect (Only for Landing Page)
         window.addEventListener('scroll', () => {
@@ -317,6 +318,39 @@ const app = {
                 });
             });
         }
+    },
+
+    // Sidebar Logic
+    toggleSidebar: () => {
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+        if (sidebar && overlay) {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+    },
+
+    initSidebar: () => {
+        // Create overlay if it doesn't exist
+        if (!document.querySelector('.sidebar-overlay')) {
+            const overlay = document.createElement('div');
+            overlay.className = 'sidebar-overlay';
+            document.body.appendChild(overlay);
+            overlay.addEventListener('click', () => {
+                app.toggleSidebar();
+            });
+        }
+
+        // Close sidebar on link click (mobile)
+        const sidebarLinks = document.querySelectorAll('.sidebar-nav .nav-item');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                const sidebar = document.querySelector('.sidebar');
+                if (window.innerWidth <= 1024 && sidebar && sidebar.classList.contains('open')) {
+                    app.toggleSidebar();
+                }
+            });
+        });
     }
 };
 

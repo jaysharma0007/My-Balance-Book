@@ -385,6 +385,36 @@ body {
     background: var(--primary-soft);
 }
 
+.menu-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: white;
+    border: 1px solid var(--border-light);
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.menu-toggle ion-icon {
+    font-size: 1.5rem;
+}
+
+.dark-mode .menu-toggle {
+    background: var(--bg-surface);
+    border-color: var(--border-light);
+    color: #fff;
+}
+
+@media (max-width: 1024px) {
+    .menu-toggle {
+        display: flex;
+    }
+}
+
 .hamburger input {
     display: none !important;
 }
@@ -734,15 +764,43 @@ body {
     .sidebar {
         transform: translateX(-100%);
         width: var(--sidebar-width) !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 1001;
+        /* Above overlay */
+        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        will-change: transform;
     }
 
     .sidebar.open {
         transform: translateX(0);
-        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+        box-shadow: 20px 0 60px rgba(0, 0, 0, 0.2);
     }
 
     .main-content {
         margin-left: 0 !important;
+    }
+
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease;
+    }
+
+    .sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
     }
 }
 

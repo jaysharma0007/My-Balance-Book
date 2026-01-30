@@ -87,8 +87,10 @@
         <!-- Top Header -->
         <header class="dashboard-header">
             <div class="header-left">
-
-                <div class="header-search">
+                <button class="menu-toggle" onclick="app.toggleSidebar()">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </button>
+                <div class="sidebar-toggle-sidebar" id="sidebar-toggle" onclick="app.toggleSidebar()">
                     <ion-icon name="search-outline"></ion-icon>
                     <input type="text" placeholder="Search products, stock...">
                 </div>
