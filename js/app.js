@@ -58,16 +58,11 @@ const app = {
         if (loader) {
             loader.classList.remove('fade-out');
             // Inject Iconic Structure if not present
-            if (!loader.querySelector('.prism-rings')) {
+            if (!loader.querySelector('.iconic-spinner')) {
                 loader.innerHTML = `
                     <div class="loader-content">
-                        <div class="prism-rings">
-                            <div class="prism-ring outer"></div>
-                            <div class="prism-ring middle"></div>
-                            <div class="prism-ring inner"></div>
-                        </div>
-                        <ion-icon name="wallet" class="iconic-logo"></ion-icon>
-                        <div class="iconic-text">LOADING</div>
+                        <div class="iconic-spinner"></div>
+                        <div class="loader-text">BalanceBook</div>
                     </div>
                 `;
             }
@@ -131,40 +126,49 @@ const app = {
 
         // Specific Credential Check
         if (email === 'jaysuthar7890@gmail.com' && password === '6376019471') {
-            app.hideAuth();
-
-            // Show Loader
-            app.showLoader();
+            // Show new pulsing loader on button
+            const loginSubmitBtn = document.querySelector('#login-form button[type="submit"]');
+            if (loginSubmitBtn) {
+                loginSubmitBtn.innerHTML = '<span class="loader-sm"></span> Authenticating...';
+                loginSubmitBtn.disabled = true;
+            }
 
             // Simulate API delay
             setTimeout(() => {
-                app.hideLoader();
+                app.hideAuth();
+                app.showLoader();
 
-                // Update UI State
-                const loginBtn = document.getElementById('login-btn');
-                const signupBtn = document.getElementById('signup-btn');
+                // Simulate processing
+                setTimeout(() => {
+                    app.hideLoader();
 
-                if (loginBtn) {
-                    loginBtn.textContent = 'Dashboard';
-                    loginBtn.removeAttribute('onclick'); // Remove old handler
-                    loginBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        window.location.href = 'dashboard.html';
-                    });
+                    // Update UI State
+                    const loginBtn = document.getElementById('login-btn');
+                    const signupBtn = document.getElementById('signup-btn');
 
-                    // Highlight the button to show change
-                    loginBtn.classList.remove('btn-secondary');
-                    loginBtn.classList.add('btn-primary');
-                }
+                    if (loginBtn) {
+                        loginBtn.textContent = 'Dashboard';
+                        loginBtn.removeAttribute('onclick'); // Remove old handler
+                        loginBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            window.location.href = 'dashboard.html';
+                        });
 
-                if (signupBtn) {
-                    signupBtn.style.display = 'none'; // Hide "Get Started" to clean up nav
-                }
+                        // Highlight the button to show change
+                        loginBtn.classList.remove('btn-secondary');
+                        loginBtn.classList.add('btn-primary');
+                    }
 
-                // Optional: Show a toast or small alert
-                // alert('Login Successful! Click Dashboard to proceed.');
+                    if (signupBtn) {
+                        signupBtn.style.display = 'none'; // Hide "Get Started" to clean up nav
+                    }
 
-            }, 1500); // 1.5s loading animation
+                    // Optional: Show a toast or small alert
+                    // alert('Login Successful! Click Dashboard to proceed.');
+
+                }, 1500); // 1.5s loading animation
+
+            }, 1000);
 
         } else {
             alert('Invalid Credentials. Please try again.');
@@ -172,10 +176,20 @@ const app = {
     },
 
     handleSignup: () => {
-        const name = document.querySelector('#signup-form input[type="text"]').value;
-        // Mock Signup
-        app.hideAuth();
-        window.location.href = 'dashboard.html';
+        const signupBtn = document.querySelector('#signup-form button[type="submit"]');
+        if (signupBtn) {
+            signupBtn.innerHTML = '<span class="loader-sm"></span> Creating Account...';
+            signupBtn.disabled = true;
+        }
+
+        // Mock Signup Delay
+        setTimeout(() => {
+            app.hideAuth();
+            app.showLoader();
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
+        }, 1500);
     },
 
     loadTheme: () => {
