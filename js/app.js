@@ -354,6 +354,16 @@ const app = {
         }
     },
 
+    toggleMobileSearch: () => {
+        const searchBar = document.querySelector('.header-search');
+        if (searchBar) {
+            searchBar.classList.toggle('active');
+            if (searchBar.classList.contains('active')) {
+                searchBar.querySelector('input')?.focus();
+            }
+        }
+    },
+
     initSidebar: () => {
         // Create overlay if it doesn't exist
         if (!document.querySelector('.sidebar-overlay')) {

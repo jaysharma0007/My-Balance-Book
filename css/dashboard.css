@@ -298,11 +298,13 @@ body {
     flex-shrink: 0;
 }
 
+
 /* Icon Buttons (Notification, etc.) */
 .icon-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
+    width: 44px;
+    /* Unified mobile touch target */
+    height: 44px;
+    border-radius: 12px;
     border: 1px solid var(--border-light);
     background: rgba(255, 255, 255, 0.03);
     display: flex;
@@ -312,12 +314,14 @@ body {
     position: relative;
     color: var(--text-secondary);
     transition: var(--transition-speed) var(--transition-curve);
+    will-change: transform, background, border-color;
 }
 
 .icon-btn:hover {
     background: var(--primary-soft);
     border-color: var(--primary);
     color: var(--primary);
+    transform: translateY(-2px);
 }
 
 .icon-btn ion-icon {
@@ -888,7 +892,37 @@ body {
     }
 
     .header-search {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--bg-surface);
+        padding: 12px;
+        border-bottom: 1px solid var(--border-light);
         display: none;
+        /* Hidden by default on mobile */
+        z-index: 100;
+        animation: slideDown 0.3s ease-out;
+    }
+
+    .header-search.active {
+        display: flex;
+    }
+
+    .search-toggle-btn {
+        display: flex;
+    }
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(-10px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
     }
 
     .user-info {
@@ -917,42 +951,47 @@ body {
         padding: 12px;
     }
 
+    /* Table Scroll Handling & Density */
     .card {
-        padding: 12px;
+        padding: 16px;
         margin-bottom: 16px;
         border-radius: 12px;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
-    .stats-grid-dashboard {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
-
-    .stat-card {
-        padding: 12px;
-        border-radius: 12px;
-    }
-
-    .stat-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 1.25rem;
-    }
-
-    .stat-info .value {
-        font-size: 1.35rem;
-    }
-
-    /* Table Scroll Handling */
     table {
         min-width: 600px;
     }
 
     th,
     td {
-        padding: 12px 8px;
-        font-size: 0.85rem;
+        padding: 14px 10px;
+        font-size: 0.88rem;
+    }
+}
+
+/* PC/Large Screen Optimizations */
+@media (min-width: 1441px) {
+    .dashboard-container {
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+}
+
+@media (hover: hover) {
+
+    .stat-card:hover,
+    .card:hover {
+        transform: translateY(-8px) scale(1.015);
+        border-color: var(--primary);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .sidebar .nav-item:hover {
+        background: var(--primary-soft);
+        color: var(--primary);
+        transform: translateX(8px);
     }
 }
 
